@@ -1,8 +1,9 @@
 #1. Start PowerShell as Administrator.
 #2. Powershell.exe -version 2
 #3. Set-ExecutionPolicy Unrestricted.
-#4. Navigate to Refresh Scripts directory.
-#5. Run script ./predeployment.ps1
+#4. Close PowerShell.
+#5. Open a new PowerShell session unelevated in order to run script as the logged in user.
+#6. Run script ./predeployment.ps1
 ######################################################
 #Enumerate which drive letter the deployment stick is.
 #

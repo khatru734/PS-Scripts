@@ -19,6 +19,8 @@ Set-Location $overlaydrive\"Refresh Screenshots"
 #
 $refreshfoldername = New-Item -Name "$env:USERNAME" -type "Directory"
 #
+#Gather general information from systeminfo
+systeminfo.exe | out-file -FilePath "$refreshfoldername\systeminfo_$env:USERNAME.txt"
 #Gather ipconfigall information.
 #
 ipconfig /all | Out-File -FilePath "$refreshfoldername\ipconfigall_$env:USERNAME.txt"

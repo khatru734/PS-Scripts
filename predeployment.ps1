@@ -11,9 +11,9 @@ Write-Host "Beginning Data Gathering..."
 Start-Sleep -s 2
 $overlaydrive=(Get-WMIObject Win32_LogicalDisk | Where-Object{$_.VolumeName -eq 'F50 PIVOT'} | ForEach-Object{$_.DeviceID})
 #
-#Set the location to the "Refresh Screenshots" directory on the deployment stick.
+#Set the location to the "Refresh Info" directory on the deployment stick.
 #
-Set-Location $overlaydrive\"Refresh Screenshots"
+Set-Location $overlaydrive\"Refresh Info"
 #
 #Create a directory for the pre-deployment information for the current user.
 #
@@ -30,15 +30,15 @@ ipconfig /all | Out-File -FilePath "$refreshfoldername\ipconfigall_$env:USERNAME
 Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | 
 Export-Csv -Path "$refreshfoldername\installedsoftware_$env:USERNAME.csv"
 #
-#Copy Chrome bookmarks to Refresh Screenshots directory.
+#Copy Chrome bookmarks to Refresh Info directory.
 #
 Copy-Item "$Env:USERPROFILE\AppData\Local\Google\Chrome\User Data\Default\Bookmarks" -Destination "$refreshfoldername\Chrome_Bookmarks_$env:USERNAME"
 #
-#Gather printer information and output to Refresh Screenshots directory.
+#Gather printer information and output to Refresh Info directory.
 #
 Get-WMIObject Win32_Printer -ComputerName $env:COMPUTERNAME | Select-Object Name, PortName, Path | Export-Csv -Path "$refreshfoldername\printer_config_$env:USERNAME.csv"
 #
-#Gather network drive paths and output to Refresh Screenshots directory.
+#Gather network drive paths and output to Refresh Info directory.
 #
 ##Try this command to see if this is more reliable.
 Get-WmiObject -Class Win32_MappedLogicalDisk | select Name, ProviderName | format-table -autosize | out-file -filepath "$refreshfoldername\mapped_drives_$env:USERNAME.txt"
@@ -46,11 +46,11 @@ Get-WmiObject -Class Win32_MappedLogicalDisk | select Name, ProviderName | forma
 #Get-WmiObject win32_logicaldisk -Filter 'drivetype=4' | Foreach { $MappedDrives.($_.deviceID) = $_.ProviderName }
 #$MappedDrives | Out-File -FilePath "$refreshfoldername\mapped_drives_$env:USERNAME.txt"
 #
-#Gather admin group members and output to Refresh Screenshots directory.\
+#Gather admin group members and output to Refresh Info directory.\
 #
 net localgroup administrators | Out-File "$refreshfoldername\admin_group_$env:USERNAME.txt"
 #
-#Gather Outlook PST locations and output to Refresh Screenshots directory.
+#Gather Outlook PST locations and output to Refresh Info directory.
 #
 $outlook = New-Object -comObject Outlook.Application 
 $outlook.Session.Stores | where { ($_.FilePath -like '*.PST') } | format-table DisplayName, FilePath -autosize |

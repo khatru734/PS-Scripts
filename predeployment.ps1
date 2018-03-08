@@ -40,9 +40,11 @@ Get-WMIObject Win32_Printer -ComputerName $env:COMPUTERNAME | Select-Object Name
 #
 #Gather network drive paths and output to Refresh Screenshots directory.
 #
-$MappedDrives = @{}
-Get-WmiObject win32_logicaldisk -Filter 'drivetype=4' | Foreach { $MappedDrives.($_.deviceID) = $_.ProviderName }
-$MappedDrives | Out-File -FilePath "$refreshfoldername\mapped_drives_$env:USERNAME.txt"
+##Try this command to see if this is more reliable.
+Get-WmiObject -Class Win32_MappedLogicalDisk | select Name, ProviderName | export-csv mapped_drives_$env:USERNAME.txt
+#$MappedDrives = @{}
+#Get-WmiObject win32_logicaldisk -Filter 'drivetype=4' | Foreach { $MappedDrives.($_.deviceID) = $_.ProviderName }
+#$MappedDrives | Out-File -FilePath "$refreshfoldername\mapped_drives_$env:USERNAME.txt"
 #
 #Gather admin group members and output to Refresh Screenshots directory.\
 #
